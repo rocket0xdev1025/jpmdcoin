@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JPM COIN ($JPMD) — Ethereum</title>
+  <meta name="description" content="JPM COIN ($JPMD) is a community meme token on Ethereum. Contract TBA. Follow @jpmd_coin_eth.">
+  <link rel="icon" href="assets/logo.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@380;480;580;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #07080c;
+      --ink-2: #10131a;
+      --panel: rgba(16, 18, 24, 0.78);
+      --line: rgba(228, 197, 106, 0.32);
+      --gold: #e7c56a;
+      --gold-2: #a9782c;
+      --blue: #1d4ed8;
+      --paper: #f4efe4;
+      --mute: #a89f90;
+      --danger: #f0d7a2;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    html, body { max-width: 100%; overflow-x: hidden; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--paper);
+      font-family: "Outfit", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(900px 480px at 8% -10%, rgba(228, 197, 106, 0.16), transparent 60%),
+        radial-gradient(800px 520px at 110% 8%, rgba(29, 78, 216, 0.22), transparent 55%),
+        var(--ink);
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 28px;
+      background: rgba(7, 8, 12, 0.82);
+      border-bottom: 1px solid rgba(228, 197, 106, 0.18);
+      backdrop-filter: blur(16px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+    .brand-copy { min-width: 0; }
+    .brand img {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 0 1px rgba(228, 197, 106, 0.7);
+    }
+    .brand-name {
+      font-family: "Instrument Serif", Georgia, serif;
+      font-size: 22px;
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+    .brand-sub {
+      margin-top: 3px;
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+    }
+    .nav {
+      display: flex;
+      gap: 22px;
+      color: var(--mute);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .nav a { text-decoration: none; }
+    .nav a:hover { color: var(--paper); }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .icon-link {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 1px solid rgba(244, 239, 228, 0.16);
+      text-decoration: none;
+      color: var(--paper);
+    }
+    .icon-link:hover { border-color: var(--gold); color: var(--gold); }
+    .buy {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      height: 44px;
+      padding: 0 18px 0 14px;
+      border-radius: 999px;
+      text-decoration: none;
+      color: #1a1203;
+      background: linear-gradient(180deg, #f6dc97 0%, #d7a441 55%, #b5812b 100%);
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      font-size: 13px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      box-shadow: 0 8px 24px rgba(215, 164, 65, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    }
+    .buy:hover { filter: brightness(1.06); transform: translateY(-1px); }
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #1a1203;
+      box-shadow: 0 0 0 0 rgba(26, 18, 3, 0.55);
+      animation: ping 1.8s infinite;
+    }
+    @keyframes ping {
+      70% { box-shadow: 0 0 0 8px rgba(26, 18, 3, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(26, 18, 3, 0); }
+    }
+
+    .ticker {
+      overflow: hidden;
+      width: 100%;
+      contain: inline-size;
+      border-bottom: 1px solid rgba(228, 197, 106, 0.12);
+      color: var(--gold);
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: marquee 28s linear infinite;
+    }
+    .ticker span { padding: 10px 0; white-space: nowrap; }
+    .ticker b { color: var(--paper); font-weight: 580; }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 36px));
+      margin: 28px auto 64px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 360px;
+      gap: 22px;
+      align-items: start;
+    }
+    .hero, .story, .steps, .community, .wire { min-width: 0; }
+    .hero, .story, .steps, .community { grid-column: 1; }
+    .wire { grid-column: 2; grid-row: 1 / span 4; }
+
+    .hero {
+      position: relative;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      background: #05060a;
+    }
+    .banner {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      object-position: center 45%;
+    }
+    .hero-panel {
+      display: grid;
+      grid-template-columns: 148px minmax(0, 1fr);
+      gap: 22px;
+      margin: 16px 18px 18px;
+      padding: 22px;
+      position: relative;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(12, 14, 20, 0.92), rgba(12, 14, 20, 0.78));
+      border: 1px solid rgba(228, 197, 106, 0.28);
+      backdrop-filter: blur(10px);
+    }
+    .coin {
+      width: 148px;
+      height: 148px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(228, 197, 106, 0.55);
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gold);
+      letter-spacing: 0.18em;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #3ddc84;
+      box-shadow: 0 0 10px #3ddc84;
+    }
+    h1 {
+      margin: 8px 0 0;
+      font-family: "Instrument Serif", Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(48px, 6vw, 76px);
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+    }
+    .symbol {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      padding: 6px 10px 6px 6px;
+      border-radius: 999px;
+      background: #1237b2;
+      color: white;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+    .symbol img {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+    .lede {
+      margin: 14px 0 0;
+      max-width: 46ch;
+      color: #ddd6c8;
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    .contract {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 12px 12px 16px;
+      border-radius: 16px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px dashed rgba(228, 197, 106, 0.4);
+    }
+    .contract small {
+      display: block;
+      color: var(--mute);
+      letter-spacing: 0.16em;
+      font-size: 11px;
+    }
+    .contract code {
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 16px;
+      color: var(--gold);
+    }
+    .copy {
+      border: 0;
+      cursor: pointer;
+      height: 40px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: var(--paper);
+      color: #14120e;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      font-family: inherit;
+    }
+    .copy:hover { background: white; }
+    .status {
+      min-height: 1.2em;
+      margin: 8px 0 0;
+      color: var(--gold);
+      font-size: 13px;
+    }
+
+    .card {
+      margin-top: 22px;
+      padding: 26px;
+      border-radius: 24px;
+      background: var(--panel);
+      border: 1px solid rgba(244, 239, 228, 0.08);
+    }
+    .card h2, .wire h2 {
+      margin: 0;
+      font-family: "Instrument Serif", Georgia, serif;
+      font-size: 34px;
+      font-weight: 400;
+    }
+    .card p { color: #d9d2c5; line-height: 1.6; }
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .fact {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(228, 197, 106, 0.16);
+    }
+    .fact span {
+      display: block;
+      color: var(--mute);
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    .fact strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 18px;
+      font-weight: 580;
+    }
+
+    .step-list {
+      list-style: none;
+      margin: 18px 0 0;
+      padding: 0;
+      display: grid;
+      gap: 12px;
+    }
+    .step-list li {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    .num {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #1a1203;
+      background: linear-gradient(180deg, #f6dc97, #c9962e);
+      font-weight: 700;
+    }
+    .socials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+    .socials a {
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(228, 197, 106, 0.3);
+      background: rgba(0, 0, 0, 0.25);
+    }
+    .socials a:hover { border-color: var(--gold); }
+    .socials small { display: block; color: var(--mute); letter-spacing: 0.12em; font-size: 11px; }
+    .socials b { font-size: 18px; }
+
+    .wire-card {
+      position: sticky;
+      top: 92px;
+      padding: 16px;
+      border-radius: 24px;
+      background: #0e1116;
+      border: 1px solid rgba(244, 239, 228, 0.1);
+      box-shadow: var(--shadow);
+    }
+    .wire-kicker {
+      margin: 0 0 12px;
+      color: var(--mute);
+      letter-spacing: 0.18em;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .tweet {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      padding: 8px;
+      border-radius: 18px;
+    }
+    .tweet:hover { background: rgba(255, 255, 255, 0.03); }
+    .tweet-head {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .tweet-head img {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: #000;
+    }
+    .who { font-weight: 700; display: flex; align-items: center; gap: 4px; }
+    .verified {
+      width: 16px;
+      height: 16px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #1d9bf0;
+      color: white;
+      font-size: 10px;
+    }
+    .handle { color: var(--mute); font-size: 14px; }
+    .tweet p {
+      margin: 12px 0;
+      line-height: 1.45;
+      font-size: 15px;
+      color: #f4efe4;
+    }
+    .tweet p em { color: var(--gold); font-style: normal; }
+    .shots {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .shots img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 14px;
+    }
+    .metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 16px;
+      margin-top: 12px;
+      color: var(--mute);
+      font-size: 13px;
+    }
+    .open-post {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--gold);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+    }
+
+    footer {
+      width: min(1180px, calc(100% - 36px));
+      margin: 0 auto 40px;
+      color: var(--mute);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 980px) {
+      .nav { display: none; }
+      .shell { grid-template-columns: minmax(0, 1fr); }
+      .hero, .story, .steps, .community, .wire { grid-column: auto; grid-row: auto; }
+      .hero { order: 1; }
+      .wire { order: 2; }
+      .story { order: 3; }
+      .steps { order: 4; }
+      .community { order: 5; }
+      .wire-card { position: static; }
+      .facts { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 720px) {
+      .topbar { padding: 12px 14px; gap: 10px; }
+      .icon-link { display: none; }
+      .brand-sub { display: none; }
+      .brand img { width: 36px; height: 36px; }
+      .brand-name { font-size: 16px; }
+      .buy { height: 40px; padding: 0 14px; letter-spacing: 0.12em; font-size: 12px; }
+      .shell { width: min(100% - 20px, 1180px); }
+      .banner { height: 190px; object-position: 72% center; }
+      .hero-panel { grid-template-columns: 96px minmax(0, 1fr); gap: 14px; margin: 0 12px 12px; padding: 16px; }
+      .coin { width: 96px; height: 96px; }
+      .contract { flex-direction: column; align-items: stretch; }
+      h1 { font-size: 46px; }
+      .lede { font-size: 15px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track, .pulse { animation: none; }
+      .buy:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top">
+      <img src="assets/logo.jpg" alt="JPM COIN gold coin">
+      <span>
+        <span class="brand-name">JPM COIN</span>
+        <span class="brand-sub">$JPMD · ETHEREUM</span>
+      </span>
+    </a>
+    <nav class="nav" aria-label="Page">
+      <a href="#story">Story</a>
+      <a href="#token">Token</a>
+      <a href="#community">Community</a>
+    </nav>
+    <div class="top-actions">
+      <a class="icon-link" href="https://x.com/jpmd_coin_eth" target="_blank" rel="noopener noreferrer" aria-label="X @jpmd_coin_eth">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.9 2H22l-6.8 7.8L23.2 22h-6.5l-5.1-6.7L6 22H2.9l7.3-8.4L1 2h6.6l4.6 6.1L18.9 2Zm-1.1 18h1.8L6.3 3.9H4.4L17.8 20Z"/></svg>
+      </a>
+      <a class="icon-link" href="https://t.me/jpmd_coin_eth" target="_blank" rel="noopener noreferrer" aria-label="Telegram @jpmd_coin_eth">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.9 4.3 18.6 20c-.2 1-.9 1.3-1.8.8l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.2 9.5-8.6c.4-.4-.1-.6-.6-.2L6.3 13.1 1.3 11.5c-1.1-.3-1.1-1.1.2-1.6L20.4 3.2c.9-.3 1.7.2 1.5 1.1Z"/></svg>
+      </a>
+      <a class="buy" href="https://app.uniswap.org/swap?chain=ethereum&outputCurrency=TBA" target="_blank" rel="noopener noreferrer">
+        <span class="pulse" aria-hidden="true"></span>
+        NEW BUY
+      </a>
+    </div>
+  </header>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>JPM COIN &nbsp;·&nbsp; <b>$JPMD</b> &nbsp;·&nbsp; ETHEREUM &nbsp;·&nbsp; CONTRACT TBA &nbsp;·&nbsp; @jpmd_coin_eth &nbsp;·&nbsp;&nbsp;&nbsp;</span>
+      <span>JPM COIN &nbsp;·&nbsp; <b>$JPMD</b> &nbsp;·&nbsp; ETHEREUM &nbsp;·&nbsp; CONTRACT TBA &nbsp;·&nbsp; @jpmd_coin_eth &nbsp;·&nbsp;&nbsp;&nbsp;</span>
+    </div>
+  </div>
+
+  <main class="shell" id="top">
+    <section class="hero" aria-label="JPM COIN">
+      <img class="banner" src="assets/banner.jpg" alt="Night plaza banner with $JPMD and a JPMD token">
+      <div class="hero-panel">
+        <img class="coin" src="assets/logo.jpg" alt="Gold JPM COIN">
+        <div>
+          <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Launched on Ethereum</p>
+          <h1>JPM COIN</h1>
+          <div class="symbol"><img src="assets/avatar.jpg" alt=""> $JPMD</div>
+          <p class="lede">A community meme token on Ethereum, named for the ticker in today’s headline. Gold on the outside. One contract on the chain.</p>
+          <div class="contract" id="token">
+            <div>
+              <small>Token contract</small>
+              <code id="contract-value">TBA</code>
+            </div>
+            <button class="copy" type="button" id="copy-btn">COPY</button>
+          </div>
+          <p class="status" id="copy-status" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <aside class="wire" aria-label="News post">
+      <div class="wire-card">
+        <p class="wire-kicker">On the wire</p>
+        <a class="tweet" href="https://x.com/TheBlockCo/status/2112086931538579861" target="_blank" rel="noopener noreferrer">
+          <div class="tweet-head">
+            <img src="assets/theblock-avatar.jpg" alt="">
+            <div>
+              <div class="who">The Block <span class="verified" aria-label="Verified">✓</span></div>
+              <div class="handle">@TheBlockCo · Oct 19, 2026</div>
+            </div>
+          </div>
+          <p>THE BLOCK: JPMorgan has brought its USD-denominated deposit token JPM Coin <em>$JPMD</em> to Ethereum for institutional clients.<br><br>Kinexys by JPMorgan told The Block that Ethereum's "established depth of onchain liquidity and tokenized assets" makes it a natural next public blockchain for JPMD, which was first launched last year on Base.</p>
+          <div class="shots">
+            <img src="assets/tweet-1.jpg" alt="J.P.Morgan wordmark from the post">
+            <img src="assets/tweet-2.jpg" alt="Ethereum mark from the post">
+          </div>
+          <div class="metrics">
+            <span>12 replies</span>
+            <span>14 reposts</span>
+            <span>82 likes</span>
+            <span>11.3K views</span>
+          </div>
+          <span class="open-post">OPEN POST ON X</span>
+        </a>
+      </div>
+    </aside>
+
+    <section class="card story" id="story">
+      <h2>The coin</h2>
+      <p>JPM COIN uses the symbol JPMD and lives on Ethereum. The mark is a gold coin. The community handle, on both X and Telegram, is @jpmd_coin_eth.</p>
+      <div class="facts">
+        <div class="fact"><span>Name</span><strong>JPM COIN</strong></div>
+        <div class="fact"><span>Symbol</span><strong>JPMD</strong></div>
+        <div class="fact"><span>Chain</span><strong>Ethereum</strong></div>
+      </div>
+    </section>
+
+    <section class="card steps">
+      <h2>Get in</h2>
+      <ol class="step-list">
+        <li><span class="num">1</span><span>Copy the contract <b>TBA</b>.</span></li>
+        <li><span class="num">2</span><span>Open Uniswap with the NEW BUY button.</span></li>
+        <li><span class="num">3</span><span>Swap on Ethereum. Confirm the contract before you sign.</span></li>
+      </ol>
+    </section>
+
+    <section class="card community" id="community">
+      <h2>Community</h2>
+      <div class="socials">
+        <a href="https://x.com/jpmd_coin_eth" target="_blank" rel="noopener noreferrer">
+          <small>X / TWITTER</small>
+          <b>@jpmd_coin_eth</b>
+        </a>
+        <a href="https://t.me/jpmd_coin_eth" target="_blank" rel="noopener noreferrer">
+          <small>TELEGRAM</small>
+          <b>@jpmd_coin_eth</b>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    JPM COIN ($JPMD) is an independent community meme token on Ethereum. It is not issued, sponsored, or endorsed by JPMorgan Chase &amp; Co. or Kinexys. The side card quotes a public post by The Block and is not an endorsement. Crypto tokens can go to zero.
+  </footer>
+
+  <script>
+    document.getElementById("copy-btn").addEventListener("click", async function () {
+      var value = "TBA";
+      var status = document.getElementById("copy-status");
+      try {
+        await navigator.clipboard.writeText(value);
+      } catch (err) {
+        var field = document.createElement("textarea");
+        field.value = value;
+        document.body.appendChild(field);
+        field.select();
+        document.execCommand("copy");
+        field.remove();
+      }
+      status.textContent = "Contract copied.";
+    });
+  </script>
+</body>
+</html>
